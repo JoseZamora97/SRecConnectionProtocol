@@ -1,5 +1,11 @@
 package TcpSRecProtocol.Server;
 
+/**
+ * @author Jose Miguel Zamora Batista.
+ * Interface Server,
+ * Contains all codes that are sent from
+ * server to clients.
+ */
 public interface Server {
 
     /**
@@ -14,6 +20,9 @@ public interface Server {
      */
     byte BAD = 33;
 
+    /**
+     * Start running the service.
+     */
     void startService();
 
 }

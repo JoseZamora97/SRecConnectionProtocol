@@ -23,7 +23,7 @@ public class SRecClient implements Client {
     /* Client socket */
     private Socket socket;
 
-    /* Response Status */
+    /* Response last operation Result */
     private volatile boolean allWasGood;
 
     /**
@@ -87,5 +87,4 @@ public class SRecClient implements Client {
     public synchronized boolean getLastResponseResult() {
         return allWasGood;
     }
-
 }
