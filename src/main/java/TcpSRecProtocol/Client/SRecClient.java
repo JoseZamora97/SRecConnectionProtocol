@@ -19,14 +19,14 @@ public class SRecClient implements Client {
     }
 
     @Override
-    public void send(final byte code, final File content){
+    public void send(SRecMessageRequest request){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
 
                     ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                    oos.writeObject(new SRecMessageRequest(code, content));
+                    oos.writeObject(request);
                     oos.flush();
 
                     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());

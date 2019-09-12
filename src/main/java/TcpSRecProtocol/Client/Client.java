@@ -1,7 +1,13 @@
 package TcpSRecProtocol.Client;
 
-import java.io.File;
+import TcpSRecProtocol.SRecMessageRequest;
 
+
+/**
+ * Interface Client,
+ * Contains all codes that are sent from
+ * clients to server.
+ */
 public interface Client {
 
     /**
@@ -29,9 +35,10 @@ public interface Client {
 
 
     /**
-     *
-     * @param code
-     * @param content
+     * Send to server a SRecMessageRequest message.
+     * @see SRecMessageRequest
+     * @param request the message sent to server
+     *                with the request code and content.
      */
-    void send(final byte code, final File content);
+    void send(SRecMessageRequest request);
 }
