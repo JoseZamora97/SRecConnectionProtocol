@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 
-public class SRecServer {
+public class SRecServer implements Server{
 
     private ServerSocket serverSocket;
 
@@ -13,6 +13,7 @@ public class SRecServer {
         System.out.println("Server creado en: " + InetAddress.getLocalHost() + ":" + this.serverSocket.getLocalPort());
     }
 
+    @Override
     public void startService() {
         ServerConnectionService serverConnectionService = new ServerConnectionService(serverSocket);
         serverConnectionService.run();

@@ -9,7 +9,8 @@ import java.net.Socket;
 import TcpSRecProtocol.SRecMessageRequest;
 import TcpSRecProtocol.SRecMessageResponse;
 
-public class SRecClient {
+
+public class SRecClient implements Client {
 
     private Socket socket;
 
@@ -17,6 +18,7 @@ public class SRecClient {
         this.socket = new Socket(host, Integer.parseInt(port));
     }
 
+    @Override
     public void send(final byte code, final File content){
         new Thread(new Runnable() {
             @Override

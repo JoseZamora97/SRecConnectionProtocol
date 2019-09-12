@@ -8,9 +8,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.nio.file.Files;
 
+import TcpSRecProtocol.Client.Client;
 import TcpSRecProtocol.SRecMessageRequest;
 import TcpSRecProtocol.SRecMessageResponse;
-import TcpSRecProtocol.SRecProtocolCodes;
 
 public class ServerConnectionHandler implements Runnable {
 
@@ -48,38 +48,38 @@ public class ServerConnectionHandler implements Runnable {
 
     private SRecMessageResponse attendRequest(SRecMessageRequest request) {
         switch (request.getCode()) {
-            case SRecProtocolCodes.HII:
+            case Client.HII:
                 return registerNewClientResponse();
-            case SRecProtocolCodes.PUT:
+            case Client.PUT:
                 return receiveFileResponse(request.getFile());
-            case SRecProtocolCodes.BYE:
+            case Client.BYE:
                 return deleteClientResponse();
         }
 
         // If reaches here something was wrong.
-        return new SRecMessageResponse(SRecProtocolCodes.BAD);
+        return new SRecMessageResponse(Server.BAD);
     }
 
     private SRecMessageResponse registerNewClientResponse() {
         ServerConnectionService.aliveConnections.addIfAbsent(client.getInetAddress());
-        return new SRecMessageResponse(SRecProtocolCodes.OKK);
+        return new SRecMessageResponse(Server.OKK);
     }
 
     private SRecMessageResponse deleteClientResponse() {
         ServerConnectionService.aliveConnections.remove(client.getInetAddress());
-        return new SRecMessageResponse(SRecProtocolCodes.OKK);
+        return new SRecMessageResponse(Server.OKK);
     }
 
     private SRecMessageResponse receiveFileResponse(File file)  {
 
-        SRecMessageResponse response = new SRecMessageResponse(SRecProtocolCodes.OKK);
+        SRecMessageResponse response = new SRecMessageResponse(Server.OKK);
         File fileOut = new File("fileReceived.txt");
 
         try {
             Files.copy(file.toPath(), fileOut.toPath());
         } catch (IOException e) {
             e.printStackTrace();
-            response = new SRecMessageResponse(SRecProtocolCodes.BAD);
+            response = new SRecMessageResponse(Server.BAD);
         }
 
         return response;

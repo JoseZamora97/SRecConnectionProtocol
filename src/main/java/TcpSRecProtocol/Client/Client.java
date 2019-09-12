@@ -1,12 +1,11 @@
-package TcpSRecProtocol;
+package TcpSRecProtocol.Client;
 
-/**
- * Codes from SRec Connection Protocol.
- */
-public interface SRecProtocolCodes {
+import java.io.File;
+
+public interface Client {
 
     /**
-     * CODE: HII, ( client -> server )
+     * CODE: HII,
      * when the server get this CODE saves in
      * aliveConnections list from ServerConnectionService class.
      * and say to client if is connected or not.
@@ -14,7 +13,7 @@ public interface SRecProtocolCodes {
     byte HII = 10;
 
     /**
-     * CODE: PUT, ( client -> server )
+     * CODE: PUT,
      * when the server get this CODE take
      * info from InputStream.
      * And create a file.
@@ -22,21 +21,17 @@ public interface SRecProtocolCodes {
     byte PUT = 13;
 
     /**
-     * CODE: BYE, ( client -> server )
+     * CODE: BYE,
      * when the server get this CODE removes the client
      * information from aliveConnections list from ServerConnectionService class.
      */
     byte BYE = 3;
 
-    /**
-     * CODE: OKK, ( server -> client )
-     * when server indicate that operation was successful.
-     */
-    byte OKK = 20;
 
     /**
-     * CODE: BAD, ( server -> client )
-     * when server indicate that operation was not successful.
+     *
+     * @param code
+     * @param content
      */
-    byte BAD = 33;
+    void send(final byte code, final File content);
 }
