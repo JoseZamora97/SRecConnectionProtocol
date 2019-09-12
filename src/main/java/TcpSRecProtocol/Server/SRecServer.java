@@ -10,10 +10,11 @@ public class SRecServer {
 
     public SRecServer(int port) throws IOException {
         this.serverSocket = new ServerSocket(port, 1, InetAddress.getLocalHost());
+        System.out.println("Server creado en: " + InetAddress.getLocalHost() + ":" + this.serverSocket.getLocalPort());
     }
 
-    public void startService(int connections) {
-        ServerConnectionService serverConnectionService = new ServerConnectionService(serverSocket, connections);
+    public void startService() {
+        ServerConnectionService serverConnectionService = new ServerConnectionService(serverSocket);
         serverConnectionService.run();
     }
 }
