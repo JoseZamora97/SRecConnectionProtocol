@@ -4,6 +4,7 @@ import TcpSRecProtocol.SRecMessageRequest;
 
 
 /**
+ * @author Jose Miguel Zamora Batista.
  * Interface Client,
  * Contains all codes that are sent from
  * clients to server.
@@ -33,7 +34,6 @@ public interface Client {
      */
     byte BYE = 3;
 
-
     /**
      * Send to server a SRecMessageRequest message.
      * @see SRecMessageRequest
@@ -41,4 +41,11 @@ public interface Client {
      *                with the request code and content.
      */
     void send(SRecMessageRequest request);
+
+    /**
+     * Allow to us if last request was good or not.
+     * @return true if last request receive a Server.OKK
+     *         false if last request receive a Server.BAD
+     */
+    boolean getLastResponseResult ();
 }
