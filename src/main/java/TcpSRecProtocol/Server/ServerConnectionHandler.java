@@ -12,14 +12,38 @@ import TcpSRecProtocol.Client.Client;
 import TcpSRecProtocol.SRecMessageRequest;
 import TcpSRecProtocol.SRecMessageResponse;
 
-public class ServerConnectionHandler implements Runnable {
+/**
+ * @author Jose Miguel Zamora Batista.
+ * SercerConnectionHandler is allways created by an
+ * Executor service located in ServerConnectionService class
+ * @see ServerConnectionService
+ * This class handles with a new client,
+ * receive his SRecMessageRequest request, process it and sent
+ * to client a SRecMessageResponse response.
+ * @see SRecMessageRequest
+ * @see SRecMessageRequest
+ */
+class ServerConnectionHandler implements Runnable {
 
+    /* New client socket */
     private Socket client;
 
+    /**
+     * Constructor that Creates the connection handler.
+     * @param client new client.
+     */
     ServerConnectionHandler(Socket client) {
         this.client = client;
     }
 
+    /**
+     * Start listening for a SRecMessageRequest message sent by
+     * the client and wait ( this block the thread until the
+     * message is read) and then process that request and send
+     * a new SRecMessageResponse response to the client.
+     * @see SRecMessageRequest
+     * @see SRecMessageResponse
+     */
     @Override
     public void run() {
         try {
@@ -60,16 +84,28 @@ public class ServerConnectionHandler implements Runnable {
         return new SRecMessageResponse(Server.BAD);
     }
 
+    /**
+     * Register a new client into ServerConnectionService list.
+     * @return status response.
+     */
     private SRecMessageResponse registerNewClientResponse() {
         ServerConnectionService.aliveConnections.addIfAbsent(client.getInetAddress());
         return new SRecMessageResponse(Server.OKK);
     }
 
+    /**
+     * Delete a client from ServerConnectionService list.
+     * @return status response.
+     */
     private SRecMessageResponse deleteClientResponse() {
         ServerConnectionService.aliveConnections.remove(client.getInetAddress());
         return new SRecMessageResponse(Server.OKK);
     }
 
+    /**
+     * Receives the file sent by client..
+     * @return status response.
+     */
     private SRecMessageResponse receiveFileResponse(File file)  {
 
         SRecMessageResponse response = new SRecMessageResponse(Server.OKK);

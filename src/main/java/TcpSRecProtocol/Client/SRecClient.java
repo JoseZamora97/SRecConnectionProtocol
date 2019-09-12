@@ -46,10 +46,12 @@ public class SRecClient implements Client {
      * Firstly, a SRecMessageRequest message is sent to server.
      * Secondly, server send a SRecMessageResponse message.
      * and update allWasGood variable.
-     * @param request the message sent to server
+     * @param request the SRecMessageRequest message sent to server
+     * @see SRecMessageRequest
+     * @see SRecMessageResponse
      */
     @Override
-    public void send(SRecMessageRequest request){
+    public void send(final SRecMessageRequest request){
 
         new Thread(new Runnable() {
             @Override

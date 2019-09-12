@@ -7,15 +7,36 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
+/**
+ * @author Jose Miguel Zamora Batista.
+ * ServerConnectionService never run in the same thread that
+ * SRecServer does.
+ * @see SRecServer
+ * It has a list off connections and
+ * Executor service creating new threads for deal with
+ * new clients using ServerConnectionHandler objects.
+ * @see ServerConnectionHandler
+ */
 public class ServerConnectionService implements Runnable {
 
+    /* Thread Pool */
     private ExecutorService pool;
+
+    /* The server socket */
     private ServerSocket serverSocket;
 
+    /* Service Control */
     private volatile boolean isServiceAvailable;
 
+    /* List of alive connections */
     static CopyOnWriteArrayList<InetAddress> aliveConnections;
 
+    /**
+     * Constructor function.
+     * @param serverSocket server passed from SRecServer
+     * @see SRecServer
+     */
     ServerConnectionService(ServerSocket serverSocket) {
 
         this.serverSocket = serverSocket;
@@ -25,6 +46,9 @@ public class ServerConnectionService implements Runnable {
         aliveConnections = new CopyOnWriteArrayList<>();
     }
 
+    /**
+     * Start the service while isServiceAvailable is true.
+     */
     @Override
     public void run() {
         while (isServiceAvailable) {
