@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.nio.file.Files;
 
 import TcpSRecProtocol.Client.Client;
+import TcpSRecProtocol.SRecMessage;
 import TcpSRecProtocol.SRecMessageRequest;
 import TcpSRecProtocol.SRecMessageResponse;
 
@@ -47,6 +48,8 @@ class ServerConnectionHandler implements Runnable {
     @Override
     public void run() {
         try {
+
+            System.out.println("(Handler " + client.getLocalAddress() +") connected !");
 
             ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
             SRecMessageRequest request = (SRecMessageRequest) ois.readObject();
@@ -119,5 +122,18 @@ class ServerConnectionHandler implements Runnable {
         }
 
         return response;
+    }
+
+    /**
+     * Print in console relevant information.
+     * Just for debug.
+     * @param message the message
+     */
+    public void logConsole(SRecMessage message) {
+
+        if ( message instanceof SRecMessageRequest )
+            System.out.println("(Handler " + client.getLocalAddress() +") request a message with code: " + message.getCode() + "!");
+        else
+            System.out.println("(Client: " + client.getLocalAddress() +") sending a response with code: " + message.getCode() + "!");
     }
 }

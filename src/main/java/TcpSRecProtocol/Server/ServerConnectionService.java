@@ -44,6 +44,9 @@ public class ServerConnectionService implements Runnable {
 
         this.isServiceAvailable = true;
         aliveConnections = new CopyOnWriteArrayList<>();
+
+        System.out.println("(Service) Server is running at: " + serverSocket.getInetAddress().getHostAddress() +
+                ":" + serverSocket.getLocalPort());
     }
 
     /**

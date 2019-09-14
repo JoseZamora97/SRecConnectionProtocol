@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import TcpSRecProtocol.SRecMessage;
 import TcpSRecProtocol.SRecMessageRequest;
 import TcpSRecProtocol.SRecMessageResponse;
 import TcpSRecProtocol.Server.Server;
@@ -60,12 +61,16 @@ public class SRecClient implements Client {
 
                     allWasGood = true;
 
+                    logConsole(request);
+
                     ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
                     oos.writeObject(request);
                     oos.flush();
 
                     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                     SRecMessageResponse response = (SRecMessageResponse) ois.readObject();
+
+                    logConsole(response);
 
                     if (response.getCode() == Server.BAD )
                         allWasGood = false;
@@ -89,4 +94,18 @@ public class SRecClient implements Client {
     public synchronized boolean getLastResponseResult() {
         return allWasGood;
     }
+
+    /**
+     * Print in console relevant information.
+     * Just for debug.
+     * @param message the message
+     */
+    public void logConsole(SRecMessage message) {
+
+        if ( message instanceof SRecMessageRequest )
+            System.out.println("(Client: " + socket.getLocalAddress() +") requesting a message with code: " + message.getCode() + "!");
+        else
+            System.out.println("(Client: " + socket.getLocalAddress() +") receiving a response with code: " + message.getCode() + "!");
+    }
+
 }
