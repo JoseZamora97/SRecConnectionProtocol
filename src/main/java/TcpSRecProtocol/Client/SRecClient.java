@@ -100,7 +100,7 @@ public class SRecClient implements Client {
      * Just for debug.
      * @param message the message
      */
-    public void logConsole(SRecMessage message) {
+    private void logConsole(SRecMessage message) {
 
         if ( message instanceof SRecMessageRequest )
             System.out.println("(Client: " + socket.getLocalAddress() +") requesting a message with code: " + message.getCode() + "!");

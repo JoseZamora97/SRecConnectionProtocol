@@ -54,7 +54,11 @@ class ServerConnectionHandler implements Runnable {
             ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
             SRecMessageRequest request = (SRecMessageRequest) ois.readObject();
 
+            logConsole(request);
+
             SRecMessageResponse response = attendRequest(request);
+
+            logConsole(response);
 
             ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
             oos.writeObject(response);
@@ -129,7 +133,7 @@ class ServerConnectionHandler implements Runnable {
      * Just for debug.
      * @param message the message
      */
-    public void logConsole(SRecMessage message) {
+    private void logConsole(SRecMessage message) {
 
         if ( message instanceof SRecMessageRequest )
             System.out.println("(Handler " + client.getLocalAddress() +") request a message with code: " + message.getCode() + "!");
