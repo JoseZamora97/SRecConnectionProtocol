@@ -1,4 +1,4 @@
-package TcpSRecProtocol.Server;
+package SRecProtocol.Server;
 
 import java.io.IOException;
 import java.net.InetAddress;

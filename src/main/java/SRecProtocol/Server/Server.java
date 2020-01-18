@@ -1,4 +1,4 @@
-package TcpSRecProtocol.Server;
+package SRecProtocol.Server;
 
 /**
  * @author Jose Miguel Zamora Batista.

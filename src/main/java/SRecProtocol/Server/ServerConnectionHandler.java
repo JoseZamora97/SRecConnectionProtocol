@@ -1,17 +1,18 @@
-package TcpSRecProtocol.Server;
+package SRecProtocol.Server;
 
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
-import java.nio.file.Files;
 
-import TcpSRecProtocol.Client.Client;
-import TcpSRecProtocol.SRecMessage;
-import TcpSRecProtocol.SRecMessageRequest;
-import TcpSRecProtocol.SRecMessageResponse;
+import SRecProtocol.Client.Client;
+import SRecProtocol.Messages.SRecMessage;
+import SRecProtocol.Messages.SRecMessageRequest;
+import SRecProtocol.Messages.SRecMessageResponse;
 
 /**
  * @author Jose Miguel Zamora Batista.
@@ -28,6 +29,8 @@ class ServerConnectionHandler implements Runnable {
 
     /* New client socket */
     private Socket client;
+
+    public static String PATH = "./";
 
     /**
      * Constructor that Creates the connection handler.
@@ -48,8 +51,6 @@ class ServerConnectionHandler implements Runnable {
     @Override
     public void run() {
         try {
-
-            System.out.println("(Handler " + client.getLocalAddress() +") connected !");
 
             ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
             SRecMessageRequest request = (SRecMessageRequest) ois.readObject();
@@ -82,7 +83,7 @@ class ServerConnectionHandler implements Runnable {
             case Client.HII:
                 return registerNewClientResponse();
             case Client.PUT:
-                return receiveFileResponse(request.getFile());
+                return receiveFileResponse(request);
             case Client.BYE:
                 return deleteClientResponse();
         }
@@ -96,7 +97,16 @@ class ServerConnectionHandler implements Runnable {
      * @return status response.
      */
     private SRecMessageResponse registerNewClientResponse() {
+        System.out.println("(Handler " + Thread.currentThread().getId() + ") "
+                + "Client:" + client.getInetAddress() +" connected !");
+
         ServerConnectionService.aliveConnections.addIfAbsent(client.getInetAddress());
+
+        System.out.println("(Handler Alive Connections)");
+        for(InetAddress c : ServerConnectionService.aliveConnections)
+            System.out.println(c + "\n");
+
+
         return new SRecMessageResponse(Server.OKK);
     }
 
@@ -106,6 +116,11 @@ class ServerConnectionHandler implements Runnable {
      */
     private SRecMessageResponse deleteClientResponse() {
         ServerConnectionService.aliveConnections.remove(client.getInetAddress());
+
+        System.out.println("(Handler Alive Connections)");
+        for(InetAddress c : ServerConnectionService.aliveConnections)
+            System.out.println(c + "\n");
+
         return new SRecMessageResponse(Server.OKK);
     }
 
@@ -113,16 +128,17 @@ class ServerConnectionHandler implements Runnable {
      * Receives the file sent by client..
      * @return status response.
      */
-    private SRecMessageResponse receiveFileResponse(File file)  {
+    private SRecMessageResponse receiveFileResponse(SRecMessageRequest message)  {
+
+        String filename = message.getName();
+        File file = new File(PATH, filename);
 
         SRecMessageResponse response = new SRecMessageResponse(Server.OKK);
-        File fileOut = new File("fileReceived.txt");
 
-        try {
-            Files.copy(file.toPath(), fileOut.toPath());
+        try (FileOutputStream stream = new FileOutputStream(file)) {
+            stream.write(message.getFileContent());
         } catch (IOException e) {
             e.printStackTrace();
-            response = new SRecMessageResponse(Server.BAD);
         }
 
         return response;
@@ -136,8 +152,10 @@ class ServerConnectionHandler implements Runnable {
     private void logConsole(SRecMessage message) {
 
         if ( message instanceof SRecMessageRequest )
-            System.out.println("(Handler " + client.getLocalAddress() +") request a message with code: " + message.getCode() + "!");
+            System.out.println("(Handler " + Thread.currentThread().getId() + ") "
+                    + "Client:" + client.getInetAddress() +" request a message with code: " + message.getCode() + "!");
         else
-            System.out.println("(Client: " + client.getLocalAddress() +") sending a response with code: " + message.getCode() + "!");
+            System.out.println("(Handler " + Thread.currentThread().getId() + ") "+ "Client:"
+                    + client.getInetAddress() + " sending a response with code: " + message.getCode() + "!");
     }
 }

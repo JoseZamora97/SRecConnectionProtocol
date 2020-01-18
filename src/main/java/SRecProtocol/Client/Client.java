@@ -1,6 +1,6 @@
-package TcpSRecProtocol.Client;
+package SRecProtocol.Client;
 
-import TcpSRecProtocol.SRecMessageRequest;
+import SRecProtocol.Messages.SRecMessageRequest;
 
 
 /**

@@ -1,4 +1,4 @@
-package TcpSRecProtocol;
+package SRecProtocol.Messages;
 
 import java.io.Serializable;
 

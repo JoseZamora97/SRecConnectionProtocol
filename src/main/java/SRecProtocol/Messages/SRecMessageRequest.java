@@ -1,6 +1,4 @@
-package TcpSRecProtocol;
-
-import java.io.File;
+package SRecProtocol.Messages;
 
 /**
  * @author Jose Miguel Zamora Batista.
@@ -11,24 +9,31 @@ import java.io.File;
 public class SRecMessageRequest extends SRecMessage {
 
     /* File to send */
-    private final File file;
+    private final byte[] fileContent;
+
+    private String name;
 
     /**
      * Constructor of a request.
      * @param code the code of the new request
-     * @param file the file to send. Can be Null.
+     * @param fileContent the file to send. Can be Null.
      */
-    public SRecMessageRequest(byte code, File file) {
+    public SRecMessageRequest(byte code, String name, byte[] fileContent) {
         super(code);
-        this.file = file;
+        this.fileContent = fileContent;
+        this.name = name;
     }
 
     /**
      * Return the file.
      * @return the file.
      */
-    public File getFile() {
-        return file;
+    public byte[] getFileContent() {
+        return fileContent;
+    }
+
+    public String getName() {
+        return name;
     }
 
 }

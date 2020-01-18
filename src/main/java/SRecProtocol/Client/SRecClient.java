@@ -1,14 +1,14 @@
-package TcpSRecProtocol.Client;
+package SRecProtocol.Client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import TcpSRecProtocol.SRecMessage;
-import TcpSRecProtocol.SRecMessageRequest;
-import TcpSRecProtocol.SRecMessageResponse;
-import TcpSRecProtocol.Server.Server;
+import SRecProtocol.Messages.SRecMessage;
+import SRecProtocol.Messages.SRecMessageRequest;
+import SRecProtocol.Messages.SRecMessageResponse;
+import SRecProtocol.Server.Server;
 
 
 
@@ -17,7 +17,7 @@ import TcpSRecProtocol.Server.Server;
  * Implementation of Client Interface.
  * @see Client
  * SRecClient interacts directly with SRecServer
- * @see TcpSRecProtocol.Server.SRecServer
+ * @see SRecProtocol.Server.SRecServer
  */
 public class SRecClient implements Client {
 
@@ -72,7 +72,7 @@ public class SRecClient implements Client {
 
                     logConsole(response);
 
-                    if (response.getCode() == Server.BAD )
+                    if (response.getCode() == Server.BAD)
                         allWasGood = false;
 
                     socket.close();
@@ -82,7 +82,7 @@ public class SRecClient implements Client {
                     allWasGood = false;
                 }
             }
-        }).run();
+        }).start();
     }
 
     /**
