@@ -30,5 +30,8 @@ public interface Server {
      */
     void stopService();
 
+    /**
+     * Get Connections Details.
+     */
     String getConnectionDetails();
 }

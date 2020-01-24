@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 
 import SRecProtocol.Client.Client;
@@ -30,8 +29,8 @@ class ServerConnectionHandler implements Runnable {
     /* New client socket */
     private Socket client;
 
-    public static String PATH = "./";
-    public ServerConnectionService service;
+    /* Service where the handler comes from */
+    private ServerConnectionService service;
 
     /**
      * Constructor that Creates the connection handler.
@@ -126,7 +125,7 @@ class ServerConnectionHandler implements Runnable {
     private SRecMessageResponse receiveFileResponse(SRecMessageRequest message)  {
 
         String filename = message.getName();
-        File file = new File(PATH, filename);
+        File file = new File(service.getOutputFolder(), filename);
 
         SRecMessageResponse response = new SRecMessageResponse(Server.OKK);
 
@@ -153,4 +152,5 @@ class ServerConnectionHandler implements Runnable {
             System.out.println("(Handler " + Thread.currentThread().getId() + ") "+ "Client:"
                     + client.getInetAddress() + " sending a response with code: " + message.getCode() + "!");
     }
+
 }

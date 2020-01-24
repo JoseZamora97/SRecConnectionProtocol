@@ -36,7 +36,7 @@ public class SRecServer implements Server{
 
     /**
      * Overrides interface's startService method.
-     * Creates a ServerConnectionService object for handling the
+     * Launch a thread with the service object for handle
      * new connections.
      * @see ServerConnectionService
      */
@@ -49,20 +49,39 @@ public class SRecServer implements Server{
         serviceThread.start();
     }
 
+
+    /**
+     * Overrides interface's stopService method.
+     * Stop the thread by interrupting it.
+     */
+    @Override
     public void stopService() {
         System.out.println("(Service) Server is offline");
         this.serviceThread.interrupt();
     }
 
+    /**
+     * Overrides interface's getConnectionDetails method.
+     * @return the ip:port of the server.
+     */
     @Override
     public String getConnectionDetails() {
-        return this.serverSocket.getInetAddress().getHostAddress() + ":" + this.serverSocket.getLocalPort();
+        return this.serverSocket.getInetAddress().getHostAddress() +
+                ":" + this.serverSocket.getLocalPort();
     }
 
+    /**
+     * Getter method of the Server Service.
+     * @return ServerConnectionService object.
+     */
     public ServerConnectionService getServerConnectionService() {
         return serverConnectionService;
     }
 
+    /**
+     * Setter method of the Server Service.
+     * @param serverConnectionService new serverConnectionService.
+     */
     public void setServerConnectionService(ServerConnectionService serverConnectionService) {
         this.serverConnectionService = serverConnectionService;
     }

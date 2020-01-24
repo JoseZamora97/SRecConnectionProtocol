@@ -36,6 +36,8 @@ public class ServerConnectionService implements Runnable {
     /* List of alive connections */
     private ObservableList<InetAddress> aliveConnections;
 
+    private volatile String outputFolder;
+
     /**
      * Constructor function.
      * @param serverSocket server passed from SRecServer
@@ -66,8 +68,6 @@ public class ServerConnectionService implements Runnable {
         this.pool.shutdown();
     }
 
-
-
     public boolean isServiceAvailable() {
         return isServiceAvailable;
     }
@@ -78,6 +78,16 @@ public class ServerConnectionService implements Runnable {
 
     public ObservableList<InetAddress> getAliveConnections() {
         return aliveConnections;
+    }
+
+    public void setOutputFolder(String outputFolder) {
+        synchronized (this){
+            this.outputFolder = outputFolder;
+        }
+    }
+
+    public String getOutputFolder() {
+        return this.outputFolder;
     }
 
 }
