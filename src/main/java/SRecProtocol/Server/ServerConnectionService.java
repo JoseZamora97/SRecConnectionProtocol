@@ -1,8 +1,12 @@
 package SRecProtocol.Server;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.util.LinkedList;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,7 +34,7 @@ public class ServerConnectionService implements Runnable {
     private volatile boolean isServiceAvailable;
 
     /* List of alive connections */
-    static CopyOnWriteArrayList<InetAddress> aliveConnections;
+    private ObservableList<InetAddress> aliveConnections;
 
     /**
      * Constructor function.
@@ -38,15 +42,11 @@ public class ServerConnectionService implements Runnable {
      * @see SRecServer
      */
     ServerConnectionService(ServerSocket serverSocket) {
-
         this.serverSocket = serverSocket;
         this.pool = Executors.newCachedThreadPool();
-
         this.isServiceAvailable = true;
-        aliveConnections = new CopyOnWriteArrayList<>();
-
-        System.out.println("(Service) Server is running at: " + serverSocket.getInetAddress().getHostAddress() +
-                ":" + serverSocket.getLocalPort());
+        this.aliveConnections = FXCollections.synchronizedObservableList(
+                FXCollections.observableList(new LinkedList<>()));
     }
 
     /**
@@ -54,14 +54,30 @@ public class ServerConnectionService implements Runnable {
      */
     @Override
     public void run() {
+
         while (isServiceAvailable) {
             try {
-                this.pool.execute(new ServerConnectionHandler(serverSocket.accept()));
+                this.pool.execute(new ServerConnectionHandler(serverSocket.accept(), this));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
         this.pool.shutdown();
+    }
+
+
+
+    public boolean isServiceAvailable() {
+        return isServiceAvailable;
+    }
+
+    public void setServiceAvailable(boolean serviceAvailable) {
+        isServiceAvailable = serviceAvailable;
+    }
+
+    public ObservableList<InetAddress> getAliveConnections() {
+        return aliveConnections;
     }
 
 }

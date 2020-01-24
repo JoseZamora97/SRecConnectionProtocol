@@ -31,13 +31,16 @@ class ServerConnectionHandler implements Runnable {
     private Socket client;
 
     public static String PATH = "./";
+    public ServerConnectionService service;
 
     /**
      * Constructor that Creates the connection handler.
      * @param client new client.
+     * @param serverConnectionService server service.
      */
-    ServerConnectionHandler(Socket client) {
+    ServerConnectionHandler(Socket client, ServerConnectionService serverConnectionService) {
         this.client = client;
+        this.service = serverConnectionService;
     }
 
     /**
@@ -99,13 +102,7 @@ class ServerConnectionHandler implements Runnable {
     private SRecMessageResponse registerNewClientResponse() {
         System.out.println("(Handler " + Thread.currentThread().getId() + ") "
                 + "Client:" + client.getInetAddress() +" connected !");
-
-        ServerConnectionService.aliveConnections.addIfAbsent(client.getInetAddress());
-
-        System.out.println("(Handler Alive Connections)");
-        for(InetAddress c : ServerConnectionService.aliveConnections)
-            System.out.println(c + "\n");
-
+        service.getAliveConnections().add(client.getInetAddress());
 
         return new SRecMessageResponse(Server.OKK);
     }
@@ -115,11 +112,9 @@ class ServerConnectionHandler implements Runnable {
      * @return status response.
      */
     private SRecMessageResponse deleteClientResponse() {
-        ServerConnectionService.aliveConnections.remove(client.getInetAddress());
-
-        System.out.println("(Handler Alive Connections)");
-        for(InetAddress c : ServerConnectionService.aliveConnections)
-            System.out.println(c + "\n");
+        System.out.println("(Handler " + Thread.currentThread().getId() + ") "
+                + "Client:" + client.getInetAddress() +" disconnected !");
+        service.getAliveConnections().remove(client.getInetAddress());
 
         return new SRecMessageResponse(Server.OKK);
     }

@@ -25,4 +25,10 @@ public interface Server {
      */
     void startService();
 
+    /**
+     * Stop the service.
+     */
+    void stopService();
+
+    String getConnectionDetails();
 }

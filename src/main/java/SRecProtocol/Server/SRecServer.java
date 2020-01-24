@@ -16,6 +16,9 @@ public class SRecServer implements Server{
 
     /* The server socket */
     private ServerSocket serverSocket;
+    private ServerConnectionService serverConnectionService;
+    private Thread serviceThread;
+
 
     /**
      * SRecServer Constructor.
@@ -25,6 +28,7 @@ public class SRecServer implements Server{
     public SRecServer(int port) {
         try {
             this.serverSocket = new ServerSocket(port, 1, InetAddress.getLocalHost());
+            this.serverConnectionService = new ServerConnectionService(serverSocket);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,7 +42,28 @@ public class SRecServer implements Server{
      */
     @Override
     public void startService() {
-        ServerConnectionService serverConnectionService = new ServerConnectionService(serverSocket);
-        serverConnectionService.run();
+        System.out.println("(Service) Server is running at: " + serverSocket.getInetAddress().getHostAddress() +
+                ":" + serverSocket.getLocalPort());
+
+        serviceThread = new Thread(this.serverConnectionService);
+        serviceThread.start();
+    }
+
+    public void stopService() {
+        System.out.println("(Service) Server is offline");
+        this.serviceThread.interrupt();
+    }
+
+    @Override
+    public String getConnectionDetails() {
+        return this.serverSocket.getInetAddress().getHostAddress() + ":" + this.serverSocket.getLocalPort();
+    }
+
+    public ServerConnectionService getServerConnectionService() {
+        return serverConnectionService;
+    }
+
+    public void setServerConnectionService(ServerConnectionService serverConnectionService) {
+        this.serverConnectionService = serverConnectionService;
     }
 }

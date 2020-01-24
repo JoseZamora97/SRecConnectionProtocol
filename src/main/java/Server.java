@@ -2,15 +2,13 @@ import java.io.File;
 
 import SRecProtocol.Server.SRecServer;
 
-public class Main {
+public class Server {
 
-    static int PORT = 55555;
+    static int PORT = 0;
 
     public static void main(String[] args) {
-
         SRecServer server = new SRecServer(PORT);
         server.startService();
-
     }
 
 }
