@@ -12,11 +12,16 @@ import java.net.ServerSocket;
  * another thread for handling new connections.
  * @see ServerConnectionService
  */
+@SuppressWarnings("unused")
 public class SRecServer implements Server{
 
     /* The server socket */
     private ServerSocket serverSocket;
+
+    /* The server service */
     private ServerConnectionService serverConnectionService;
+
+    /* Thread of the service */
     private Thread serviceThread;
 
 

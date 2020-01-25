@@ -1,15 +1,14 @@
 package SRecProtocol.Server;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.LinkedList;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 
 /**
@@ -22,6 +21,7 @@ import java.util.concurrent.Executors;
  * new clients using ServerConnectionHandler objects.
  * @see ServerConnectionHandler
  */
+@SuppressWarnings("unused")
 public class ServerConnectionService implements Runnable {
 
     /* Thread Pool */
@@ -68,24 +68,45 @@ public class ServerConnectionService implements Runnable {
         this.pool.shutdown();
     }
 
+    /**
+     * Getter of isServiceAvailable.
+     * @return true if is this service Available
+     */
     public boolean isServiceAvailable() {
         return isServiceAvailable;
     }
 
+    /**
+     * Setter of isServiceAvailable.
+     * @param serviceAvailable true or false.
+     */
     public void setServiceAvailable(boolean serviceAvailable) {
         isServiceAvailable = serviceAvailable;
     }
 
+    /**
+     * Getter of Alive Connections List
+     * @return alive connections list.
+     */
     public ObservableList<InetAddress> getAliveConnections() {
         return aliveConnections;
     }
 
+    /**
+     * Setter of Output folder.
+     * Pre: Must be a valid location.
+     * @param outputFolder new path.
+     */
     public void setOutputFolder(String outputFolder) {
         synchronized (this){
             this.outputFolder = outputFolder;
         }
     }
 
+    /**
+     * Getter of Output folder.
+     * @return the current output folder.
+     */
     public String getOutputFolder() {
         return this.outputFolder;
     }

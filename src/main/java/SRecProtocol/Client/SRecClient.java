@@ -11,7 +11,6 @@ import SRecProtocol.Messages.SRecMessageResponse;
 import SRecProtocol.Server.Server;
 
 
-
 /**
  * @author Jose Miguel Zamora Batista.
  * Implementation of Client Interface.
@@ -19,6 +18,7 @@ import SRecProtocol.Server.Server;
  * SRecClient interacts directly with SRecServer
  * @see SRecProtocol.Server.SRecServer
  */
+@SuppressWarnings("unused")
 public class SRecClient implements Client {
 
     /* Client socket */
@@ -54,33 +54,30 @@ public class SRecClient implements Client {
     @Override
     public void send(final SRecMessageRequest request){
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
+        new Thread(() -> {
+            try {
 
-                    allWasGood = true;
+                allWasGood = true;
 
-                    logConsole(request);
+                logConsole(request);
 
-                    ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                    oos.writeObject(request);
-                    oos.flush();
+                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                oos.writeObject(request);
+                oos.flush();
 
-                    ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-                    SRecMessageResponse response = (SRecMessageResponse) ois.readObject();
+                ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+                SRecMessageResponse response = (SRecMessageResponse) ois.readObject();
 
-                    logConsole(response);
+                logConsole(response);
 
-                    if (response.getCode() == Server.BAD)
-                        allWasGood = false;
-
-                    socket.close();
-
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
+                if (response.getCode() == Server.BAD)
                     allWasGood = false;
-                }
+
+                socket.close();
+
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+                allWasGood = false;
             }
         }).start();
     }

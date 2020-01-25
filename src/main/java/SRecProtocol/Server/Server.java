@@ -6,6 +6,7 @@ package SRecProtocol.Server;
  * Contains all codes that are sent from
  * server to clients.
  */
+@SuppressWarnings("unused")
 public interface Server {
 
     /**

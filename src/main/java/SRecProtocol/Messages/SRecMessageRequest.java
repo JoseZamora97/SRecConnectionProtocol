@@ -32,6 +32,10 @@ public class SRecMessageRequest extends SRecMessage {
         return fileContent;
     }
 
+    /**
+     * Return the filename.
+     * @return the filename.
+     */
     public String getName() {
         return name;
     }

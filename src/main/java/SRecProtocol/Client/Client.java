@@ -9,6 +9,7 @@ import SRecProtocol.Messages.SRecMessageRequest;
  * Contains all codes that are sent from
  * clients to server.
  */
+@SuppressWarnings("unused")
 public interface Client {
 
     /**
