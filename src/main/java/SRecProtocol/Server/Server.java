@@ -10,13 +10,13 @@ package SRecProtocol.Server;
 public interface Server {
 
     /**
-     * CODE: OKK, ( server -> client )
+     * CODE: OKK,
      * when server indicate that operation was successful.
      */
     byte OKK = 20;
 
     /**
-     * CODE: BAD, ( server -> client )
+     * CODE: BAD,
      * when server indicate that operation was not successful.
      */
     byte BAD = 33;
@@ -33,6 +33,7 @@ public interface Server {
 
     /**
      * Get Connections Details.
+     * @return "ip"+":"+"port" string format.
      */
     String getConnectionDetails();
 }

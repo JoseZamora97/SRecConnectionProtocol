@@ -120,6 +120,7 @@ class ServerConnectionHandler implements Runnable {
 
     /**
      * Receives the file sent by client..
+     * @param message to process.
      * @return status response.
      */
     private SRecMessageResponse receiveFileResponse(SRecMessageRequest message)  {

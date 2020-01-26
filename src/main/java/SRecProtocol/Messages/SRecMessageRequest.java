@@ -15,7 +15,8 @@ public class SRecMessageRequest extends SRecMessage {
 
     /**
      * Constructor of a request.
-     * @param code the code of the new request
+     * @param code the code of the new request.
+     * @param name the name of the file.
      * @param fileContent the file to send. Can be Null.
      */
     public SRecMessageRequest(byte code, String name, byte[] fileContent) {
